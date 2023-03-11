@@ -2,49 +2,52 @@
 
 import React from 'react';
 import { Box, Cylinder } from '@react-three/drei';
+import { MeshProps } from '@react-three/fiber';
+import * as THREE from 'three';
 
-export interface CloudProps {
+export interface CloudProps extends MeshProps {
   width: number;
   height: number;
   depth: number;
-  position?: [x: number, y: number, z: number];
 }
 
-export default function Cloud({
-  width,
-  height,
-  depth,
-  position = [0, 0, 0],
-}: CloudProps) {
+export type CloudRef = THREE.Mesh;
+
+const Cloud = React.forwardRef<CloudRef, CloudProps>(function Cloud(
+  { width, height, depth, ...props },
+  ref,
+) {
   return (
-    <>
+    <mesh ref={ref} {...props}>
       <Cylinder
         args={[width, height, depth]}
-        position={position}
+        position={[0, 0, 0]}
         rotation={[Math.PI / 2, 0, 0]}
       >
         <meshStandardMaterial color="white" envMapIntensity={0.25} />
       </Cylinder>
       <Cylinder
         args={[width, height, depth]}
-        position={[position[0] + width, position[1] + width, position[2]]}
+        position={[width, width, 0]}
         rotation={[Math.PI / 2, 0, 0]}
       >
         <meshStandardMaterial color="white" envMapIntensity={0.25} />
       </Cylinder>
       <Cylinder
         args={[width, height, depth]}
-        position={[position[0] + width * 2, position[1], position[2]]}
+        position={[width * 2, 0, 0]}
         rotation={[Math.PI / 2, 0, 0]}
       >
         <meshStandardMaterial color="white" envMapIntensity={0.25} />
       </Cylinder>
       <Box
         args={[width * 2, height, depth]}
-        position={[position[0] + width, position[1] - height / 2, position[2]]}
+        position={[width, 0 - height / 2, 0]}
       >
         <meshStandardMaterial color="white" envMapIntensity={0.25} />
       </Box>
-    </>
+    </mesh>
   );
-}
+});
+
+export default Cloud;
