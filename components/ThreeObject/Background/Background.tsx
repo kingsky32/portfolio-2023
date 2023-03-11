@@ -17,20 +17,10 @@ const Background = React.memo(function Background({
   height,
   depth,
 }: BackgroundProps) {
-  const cloud1Ref = React.useRef<null | CloudRef>(null);
-  const cloud2Ref = React.useRef<null | CloudRef>(null);
-  const cloud3Ref = React.useRef<null | CloudRef>(null);
-  const cloud4Ref = React.useRef<null | CloudRef>(null);
-  const cloud5Ref = React.useRef<null | CloudRef>(null);
+  const cloudsRef = React.useRef<(CloudRef | null)[]>([]);
 
   useFrame(() => {
-    [
-      cloud1Ref.current,
-      cloud2Ref.current,
-      cloud3Ref.current,
-      cloud4Ref.current,
-      cloud5Ref.current,
-    ].forEach((mesh) => {
+    cloudsRef.current.forEach((mesh) => {
       if (mesh) {
         if (mesh.position.x > 10) {
           mesh.position.x = -10;
@@ -43,41 +33,24 @@ const Background = React.memo(function Background({
 
   return (
     <>
-      <Cloud
-        ref={cloud1Ref}
-        width={0.25}
-        height={0.25}
-        depth={0.05}
-        position={[2, 4, -2]}
-      />
-      <Cloud
-        ref={cloud2Ref}
-        width={0.25}
-        height={0.25}
-        depth={0.05}
-        position={[-9, 4, 0]}
-      />
-      <Cloud
-        ref={cloud3Ref}
-        width={0.25}
-        height={0.25}
-        depth={0.05}
-        position={[0, 4, 3]}
-      />
-      <Cloud
-        ref={cloud4Ref}
-        width={0.25}
-        height={0.25}
-        depth={0.05}
-        position={[5, 2, 3]}
-      />
-      <Cloud
-        ref={cloud5Ref}
-        width={0.25}
-        height={0.25}
-        depth={0.05}
-        position={[-8, 1, 3]}
-      />
+      {[...new Array(6)].map((_, index) => {
+        return (
+          <Cloud
+            key={`Cloud-${index}`}
+            ref={(ref) => {
+              cloudsRef.current[index] = ref;
+            }}
+            width={0.25}
+            height={0.25}
+            depth={0.05}
+            position={[
+              Math.round(Math.random() * 20) - 10,
+              4,
+              Math.round(Math.random() * 10) - 5,
+            ]}
+          />
+        );
+      })}
       <Box args={[width, 0.1, depth]} position={[0, -0.1, 0]}>
         <meshStandardMaterial color="green" envMapIntensity={0.25} />
       </Box>
