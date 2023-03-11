@@ -45,7 +45,7 @@ const Background = React.memo(function Background({
             depth={0.05}
             position={[
               Math.round(Math.random() * 20) - 10,
-              4,
+              Math.random() * 5 + 4,
               Math.round(Math.random() * 10) - 5,
             ]}
           />
