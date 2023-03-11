@@ -1,5 +1,5 @@
-import '#styles/reset.scss';
-import '#styles/global.scss';
+import '#app/reset.scss';
+import '#app/global.scss';
 
 import React from 'react';
 import { Providers } from '#app/providers';
